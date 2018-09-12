@@ -1,0 +1,26 @@
+body{
+    font-family: 'Dosis', sans-serif;
+    font-size: 18px;
+    line-height: 1.5;
+  }
+  hr {
+    border: 0;
+    border-top: 1px solid #bfbfbf;
+    margin: 20px 0;
+    box-sizing: content-box;
+    height: 0;
+    overflow: visible;
+  }
+  a{
+    color: #6c757d!important;
+  }
+  a:hover{
+    text-decoration: none;
+    color: #000;
+  }
+  a.mx-auto{
+    color: #000!important;
+  }
+  .card{
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+  }
