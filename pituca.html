@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Você me ama? 💘</title>
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Open+Sans:wght@400;600&display=swap");
+    :root { --primary:#d81b60; --dark:#111; --gray:#777; }
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:1rem;background:linear-gradient(135deg,#ffdee9 0%,#b5fffc 100%);font-family:"Open Sans",sans-serif;overflow:hidden}
+    .card{background:rgba(255,255,255,.92);padding:2rem 1.5rem;border-radius:1rem;box-shadow:0 8px 24px rgba(0,0,0,.15);text-align:center;max-width:480px;width:100%}
+    h1{font-family:"Playfair Display",serif;color:var(--primary);font-size:1.9rem;margin-bottom:1.8rem}
+    .btn{border:none;cursor:pointer;transition:background .3s;padding:.75rem 1.5rem;font-size:1.1rem;border-radius:.5rem;display:block;margin:.5rem auto;position:relative}
+    .btn.sim{background:var(--primary);color:#fff;width:160px;z-index:9999}
+    .btn.sim:hover{background:#b0124b}
+    .btn.nao{background:var(--gray);color:#fff;width:190px}
+    .btn.nao:hover{background:#555}
+    #hint{display:none;margin-top:1rem;font-size:1.15rem;line-height:1.5;color:var(--primary);font-weight:600;animation:pulse 1s ease-in-out infinite alternate;pointer-events:none}
+    @keyframes pulse{from{transform:scale(1)}to{transform:scale(1.05)}}
+    .text-block{margin:1rem 0;font-size:1.1rem;line-height:1.55;color:var(--dark)}
+    footer{margin-top:1.3rem;font-weight:600}
+    .heart{position:fixed;top:-2rem;width:2rem;height:2rem;background:red;transform:rotate(-45deg);animation:fall 8s linear infinite;opacity:.8;pointer-events:none}
+    .heart::before,.heart::after{content:"";position:absolute;width:2rem;height:2rem;background:red;border-radius:50%}
+    .heart::before{top:-1rem;left:0}.heart::after{left:1rem;top:0}
+    @keyframes fall{0%{transform:translateY(-10vh) rotate(-45deg) scale(.8)}100%{transform:translateY(110vh) rotate(-45deg) scale(1.1)}}
+    video{width:100%;border-radius:.8rem;box-shadow:0 4px 12px rgba(0,0,0,.25)}
+  </style>
+</head>
+<body>
+  <!-- Tela 1 -->
+  <div id="quiz" class="card">
+    <h1>Você me ama?</h1>
+    <button id="naoBtn" class="btn nao">Não</button>
+    <button id="simBtn" class="btn sim">Sim</button>
+    <p id="hint">Tá difícil, né? Mesmo quando o amor desafiar, você vai continuar tentando? ❤</p>
+  </div>
+
+  <!-- Tela 2 -->
+  <div id="final" class="card" style="display:none">
+    <h1>Feliz Dia dos Namorados</h1>
+    <p class="text-block">Às vezes o amor se esconde atrás de pequenos desafios, como esse "SIM" difícil.<br/>Cada tentativa que você fez trouxe seu toque mais perto do meu coração mostrando que o que vale a pena exige coragem, paciência e uma pitada de diversão com criatividade.</p>
+    <p class="text-block">Obrigado por insistir, por rir comigo e por transformar nossas loucuras em memórias que aquecem a alma. Se clicamos juntos, vencemos juntos. Que venham outros desafios, e infinitos "SIM" junto à nossa vida!</p>
+    <footer>Com todo o meu amor,<br/>Seu Lindo</footer>
+    <div style="margin-top:1.5rem">
+      <p style="font-weight:600;color:var(--primary);font-size:1.15rem">Quer saber se eu te amo?</p>
+      <button id="yesLoveBtn" class="btn sim">SIM</button>
+      <button class="btn nao" style="pointer-events:none">NÃO</button>
+    </div>
+  </div>
+
+  <!-- Tela 3 -->
+  <div id="love" class="card" style="display:none">
+    <h1>caso você ainda tenha dúvidas, quero deixar bem claro:</h1>
+    <p class="text-block">Eu não me apaixonei por você. Eu entrei no amor com você, com os olhos bem abertos, escolhendo dar cada passo ao longo do caminho. Eu realmente acredito no destino, mas também acredito que somos destinados a fazer apenas as coisas que escolheríamos de qualquer forma. E eu te escolheria; em cem vidas, em cem mundos, em qualquer versão da realidade, eu te encontraria e te escolheria.</p>
+    <div style="margin-top:1.5rem">
+      <p style="font-weight:600;color:var(--primary);font-size:1.15rem">e caso ainda assim tenha dúvidas:</p>
+      <button id="discoverBtn" class="btn sim">descubra aqui</button>
+    </div>
+  </div>
+
+  <!-- Tela 4 -->
+  <div id="videoCard" class="card" style="display:none">
+    <video id="loveVideo" src="./mensagem.mp4" autoplay playsinline></video>
+    <p style="margin-top:1rem;font-size:1.2rem;font-weight:600;color:var(--primary);">eu te amo infinitamente, minha pituca!</p>
+  </div>
+
+  <script>
+    const simBtn=document.getElementById("simBtn"),
+          naoBtn=document.getElementById("naoBtn"),
+          quizDiv=document.getElementById("quiz"),
+          finalDiv=document.getElementById("final"),
+          loveDiv=document.getElementById("love"),
+          videoCard=document.getElementById("videoCard"),
+          hintEl=document.getElementById("hint"),
+          yesLoveBtn=document.getElementById("yesLoveBtn"),
+          discoverBtn=document.getElementById("discoverBtn"),
+          loveVideo=document.getElementById("loveVideo");
+
+    let moves=0,maxMoves=10;
+    function evasiveMove(){
+      if(moves>=maxMoves) return;
+      const w=simBtn.offsetWidth,h=simBtn.offsetHeight;
+      const x=Math.random()*(window.innerWidth-w-20);
+      const y=Math.random()*(window.innerHeight-h-20);
+      simBtn.style.position="fixed";
+      simBtn.style.left=x+"px";
+      simBtn.style.top=y+"px";
+      simBtn.style.zIndex="10000";
+      moves++; if(moves===3) hintEl.style.display="block";
+    }
+    simBtn.addEventListener("mouseenter",evasiveMove);
+    simBtn.addEventListener("touchstart",e=>{if(moves<maxMoves){e.preventDefault();evasiveMove();}});
+    const showFinal=()=>{if(moves>=maxMoves){quizDiv.style.display="none";finalDiv.style.display="block";}};
+    simBtn.addEventListener("click",showFinal); simBtn.addEventListener("touchend",showFinal);
+    const neg=()=>alert("Impossível! Eu continuo te amando mesmo assim. 💘");
+    naoBtn.addEventListener("click",neg); naoBtn.addEventListener("touchstart",e=>{e.preventDefault();neg();});
+
+    yesLoveBtn.addEventListener("click",()=>{finalDiv.style.display="none";loveDiv.style.display="block";});
+    discoverBtn.addEventListener("click",()=>{
+      loveDiv.style.display="none";
+      videoCard.style.display="block";
+      loveVideo.currentTime=0;
+      loveVideo.play();
+    });
+
+    // Hearts
+    for(let i=0;i<25;i++){
+      const h=document.createElement("div");
+      h.className="heart";
+      const s=Math.random()*0.8+0.4;
+      h.style.transform=`rotate(-45deg) scale(${s})`;
+      h.style.left=`${Math.random()*100}vw`;
+      h.style.animationDuration=`${5+Math.random()*5}s`;
+      h.style.animationDelay=`-${Math.random()*10}s`;
+      document.body.appendChild(h);
+    }
+  </script>
+</body>
+</html>
